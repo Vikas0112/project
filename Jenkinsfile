@@ -8,6 +8,7 @@ pipeline {
     environment {
         IMAGE_NAME = "mycompany/${params.SERVICE.toLowerCase()}"
         TIMESTAMP = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
+        DOCKERFILE_DIR = "${params.SERVICE.toLowerCase()}"
     }
 
     stages {
@@ -20,22 +21,17 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME}:${TIMESTAMP} -f ${params.SERVICE}/Dockerfile ."
+                    sh "docker build -t ${IMAGE_NAME}:${TIMESTAMP} -f ${DOCKERFILE_DIR}/Dockerfile ."
                 }
             }
         }
 
         stage('Push Docker Image (optional)') {
             when {
-                expression { return false } // Change to true if you want to push
+                expression { return false }
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh """
-                        echo "$PASS" | docker login -u "$USER" --password-stdin
-                        docker push ${IMAGE_NAME}:${TIMESTAMP}
-                    """
-                }
+                echo 'Skipping image push.'
             }
         }
     }
