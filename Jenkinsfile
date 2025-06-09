@@ -6,14 +6,20 @@ pipeline {
     }
 
     environment {
-    IMAGE_NAME = "mycompany/${params.SERVICE.toLowerCase()}"
-    TIMESTAMP = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
-    DOCKERFILE_DIR = "${params.SERVICE}"  // Keep it uppercase if that's what you have
-}
-
+        IMAGE_NAME = "mycompany/${params.SERVICE.toLowerCase()}"
+        TIMESTAMP = ''
+        DOCKERFILE_DIR = "${params.SERVICE}"
     }
 
     stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    TIMESTAMP = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
