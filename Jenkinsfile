@@ -7,15 +7,15 @@ pipeline {
 
     environment {
         IMAGE_NAME = "mycompany/${params.SERVICE.toLowerCase()}"
-        TIMESTAMP = ''
-        DOCKERFILE_DIR = "${params.SERVICE}"
+        DOCKERFILE_DIR = "${params.SERVICE.toLowerCase()}"
     }
 
     stages {
         stage('Initialize') {
             steps {
                 script {
-                    TIMESTAMP = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
+                    def timestamp = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
+                    env.TIMESTAMP = timestamp
                 }
             }
         }
