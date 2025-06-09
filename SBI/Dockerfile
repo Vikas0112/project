@@ -1,14 +1,16 @@
-# Use a base image (e.g., Alpine Linux)
-FROM alpine:latest
+FROM python:3.9-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy local files into the container
+# Copy your app into the image
 COPY . .
 
-# Install any necessary tools (if needed)
-# RUN apk add --no-cache bash curl
+# Install dependencies
+RUN pip install flask
 
-# Default command
-CMD ["echo", "Running SBI service test container"]
+# Expose port
+EXPOSE 80
+
+# Run the app
+CMD ["python", "app.py"]
