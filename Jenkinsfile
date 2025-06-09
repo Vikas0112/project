@@ -29,7 +29,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME}:${TIMESTAMP} -f ${DOCKERFILE_DIR}/Dockerfile ."
+                    sh "docker build -t ${IMAGE_NAME}:${TIMESTAMP} ${DOCKERFILE_DIR}"
                 }
             }
         }
